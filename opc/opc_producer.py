@@ -37,8 +37,8 @@ from asyncua import Client, ua
 from kafka import KafkaProducer
 
 
-producer = KafkaProducer(bootstrap_servers=['host.docker.internal:29092'])
-
+producer = KafkaProducer(bootstrap_servers=['host.docker.internal:9092'])
+print(producer)
 async def main():
     url = "opc.tcp://host.docker.internal:4840/freeopcua/server/"
     namespace = "weintek"   
@@ -55,8 +55,9 @@ async def main():
             "value1": value
             }
             json_data = json.dumps(message)
-            print(message)
+            
             producer.send('opc_server', json_data.encode())
+            print(message)
             producer.flush()
             time.sleep(1)
             # return value

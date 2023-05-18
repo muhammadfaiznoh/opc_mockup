@@ -11,10 +11,12 @@
 
 # CMD [ "python" "./kafka_consumer.py"]
 
-FROM confluentinc/cp-kafka:latest
+FROM confluentinc/cp-kafka:5.3.1
 
 ENV KAFKA_BROKER_ID 1
 ENV KAFKA_ZOOKEEPER_CONNECT localhost:2181
 ENV KAFKA_TOPIC opc_server
 
-CMD ["kafka-console-consumer", "--bootstrap-server", "localhost:29092", "--topic", "opc_server"]
+# WORKDIR /usr/bin
+
+CMD ["kafka-console-consumer", "--bootstrap-server", "localhost:9092", "--topic", "opc_server"]
