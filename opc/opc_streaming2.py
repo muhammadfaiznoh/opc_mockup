@@ -1,8 +1,8 @@
 from confluent_kafka import Consumer, KafkaException, KafkaError
 
 conf = {
-    'bootstrap.servers': 'localhost:9092',  # Kafka broker address
-    'group.id': 'console-consumer-48196',        # Consumer group ID
+    'bootstrap.servers': 'kafka:19092',  # Kafka broker address
+    'group.id': 'console-consumer-92606',        # Consumer group ID
     'auto.offset.reset': 'earliest',        # Start consuming from the beginning of the topic
     'enable.auto.commit': False             # Disable auto commit
 }

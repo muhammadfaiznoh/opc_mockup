@@ -33,11 +33,32 @@
 import asyncio
 import time
 import json
+import ping3
 from asyncua import Client, ua
 from kafka import KafkaProducer
+from kafka.errors import KafkaError
 
 
-producer = KafkaProducer(bootstrap_servers=['host.docker.internal:9092'])
+def ping(host):
+    response_time = ping3.ping(host)
+    if response_time is not None:
+        print(f"Host {host} is reachable. Response time: {response_time} ms")
+    else:
+        print(f"Host {host} is unreachable.")
+
+# Example usage
+ping("kafka")
+
+def on_send_success(record_metadata):
+    print(record_metadata.topic)
+    print(record_metadata.partition)
+    print(record_metadata.offset)
+
+def on_send_error(excp):
+    log.error('I am an errback', exc_info=excp)
+    
+    
+producer = KafkaProducer(bootstrap_servers='kafka:19092')
 print(producer)
 async def main():
     url = "opc.tcp://host.docker.internal:4840/freeopcua/server/"
@@ -56,7 +77,7 @@ async def main():
             }
             json_data = json.dumps(message)
             
-            producer.send('opc_server', json_data.encode())
+            producer.send('opc_server', json_data.encode()).add_callback(on_send_success).add_errback(on_send_error)
             print(message)
             producer.flush()
             time.sleep(1)
@@ -78,6 +99,7 @@ async def main():
     #     # Sleep for a second.
     #     time.sleep(1)
 
+    # handle exception
 # data = asyncio.run(main(sensorNode))
 # print(data)
 if __name__ == "__main__":
