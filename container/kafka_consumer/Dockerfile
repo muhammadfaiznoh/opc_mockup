@@ -19,4 +19,4 @@ ENV KAFKA_TOPIC opc_server
 
 # WORKDIR /usr/bin
 
-CMD ["kafka-console-consumer", "--bootstrap-server", "localhost:9092", "--topic", "opc_server"]
+CMD ["kafka-console-consumer", "--bootstrap-server", "kafka:19092", "--topic", "opc_server"]

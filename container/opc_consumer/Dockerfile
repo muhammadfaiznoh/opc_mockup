@@ -10,4 +10,4 @@ WORKDIR /opt/opc_mockup/opc
 
 COPY ../../opc /opt/opc_mockup/opc
 
-# CMD ["python", "./opc_producer.py"]
+CMD ["python", "./opc_streaming.py"]
