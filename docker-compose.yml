@@ -55,15 +55,12 @@ services:
 
   opc_consumer:
     build:
-        dockerfile: ./container/opc/Dockerfile
-    entrypoint: 
-      - python
-      - ./opc_streaming.py
+        dockerfile: ./container/opc_consumer/Dockerfile
     container_name: opc_consumer
     restart: always
     depends_on:
       - kafka
-      
+
   mongo:
     image: mongo
     restart: always
