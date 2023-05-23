@@ -67,6 +67,9 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - ./data:/data/db
+
 
   mongo-express:
     image: mongo-express
@@ -77,6 +80,51 @@ services:
       ME_CONFIG_MONGODB_ADMINUSERNAME: root
       ME_CONFIG_MONGODB_ADMINPASSWORD: example
       ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+
+  superset:
+    image: apache/superset
+    container_name: superset
+    environment:
+      - SUPERSET_LOAD_EXAMPLES=yes
+      - SQLALCHEMY_DATABASE_URI=mongodb://root:example@mongo:27017/
+      - SQLALCHEMY_ENABLE_POOL_PRE_PING=true
+      - PYTHONPATH=/app/superset_config.py
+      - SUPERSET_SECRET_KEY=openssl rand -base64 42
+
+    ports:
+      - 8088:8088
+    # volumes:
+    #   - ./superset:/app/superset
+    depends_on:
+      - mongo
+    command: "superset run -p 8088 -h 0.0.0.0"
+
+#   db:
+#     image: postgres
+#     container_name: local_pgdb
+#     restart: always
+#     ports:
+#       - "54320:5432"
+#     environment:
+#       POSTGRES_USER: user
+#       POSTGRES_PASSWORD: admin
+#     volumes:
+#       - local_pgdata:/var/lib/postgresql/data
+
+#   pgadmin:
+#     image: dpage/pgadmin4
+#     container_name: pgadmin4_container
+#     restart: always
+#     ports:
+#       - "5050:80"
+#     environment:
+#       PGADMIN_DEFAULT_EMAIL: admin@test.com
+#       PGADMIN_DEFAULT_PASSWORD: admin
+#     volumes:
+#       - pgadmin-data:/var/lib/pgadmin
+# volumes:
+#   local_pgdata:
+#   pgadmin-data:
 
 networks:
   mockup_network:
