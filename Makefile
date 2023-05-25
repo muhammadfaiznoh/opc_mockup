@@ -14,4 +14,4 @@ build:
 	docker compose build
 
 vol:
-	docker volume create db
+	docker volume create postgres_db

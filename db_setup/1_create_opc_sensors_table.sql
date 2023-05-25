@@ -1,6 +1,6 @@
 
 CREATE TABLE opc_sensors(
-    datatime VARCHAR(100),
+    datatime timestamp,
     opc_pressure FLOAT,
     opc_temperature FLOAT
 );

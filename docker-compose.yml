@@ -132,8 +132,8 @@ services:
     #   POSTGRES_PASSWORD: password
     #   POSTGRES_DB: postgres
     volumes:
-      - db:/data/db
       - ./db_setup:/docker-entrypoint-initdb.d
+      - postgres_db:/data/db
       # - data:/var/lib/postgresql/data
 
   pgadmin:
@@ -149,8 +149,7 @@ services:
       - pgadmin-data:/var/lib/pgadmin
 volumes:
   mongodb:
-  db:
-    external: true
+  postgres_db:
   pgadmin-data:
 
 networks:
