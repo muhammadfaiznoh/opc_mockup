@@ -1,4 +1,4 @@
-import pymongo
+import psycopg2
 
 # MongoDB connection settings
 MONGO_URI = 'mongodb://root:example@mongo:27017/opc_sensors'
