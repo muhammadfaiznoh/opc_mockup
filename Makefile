@@ -12,3 +12,6 @@ stop:
 
 build:
 	docker compose build
+
+vol:
+	docker volume create postgres_db

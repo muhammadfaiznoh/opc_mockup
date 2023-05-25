@@ -1,5 +1,7 @@
 from confluent_kafka import Consumer, KafkaException, KafkaError
 from pymongo import MongoClient
+
+from datetime import datetime
 import json
 import psycopg2
 
@@ -26,12 +28,13 @@ collection = db[collection_name]
 
 # Set up PostgreSQL connection
 conn = psycopg2.connect(
-    host='local_pgdb',
+    host='db',
     port='5432',
-    dbname='opc_server',
-    user='admin@test.com',
-    password='admin'
+    dbname='postgres',
+    user='username',
+    password='password'
 )
+# conn = psycopg2.connect("postgresql://admin:admin@local_pgdb:5432/opc_server")
 conn.autocommit = True
 cursor = conn.cursor()
 
@@ -58,7 +61,7 @@ table_name = 'opc_sensors'
 #         )
 #     """)
 # Prepare SQL statement
-sql_insert = "INSERT INTO opc_server.opc_sensors (datatime, opc_pressure,opc_temperature) VALUES (%s, %s, %s)"
+sql_insert = "INSERT INTO opc_sensors (datatime, opc_pressure,opc_temperature) VALUES (%s, %s, %s)"
 
 while True:
     try:
@@ -80,8 +83,7 @@ while True:
         # Insert the message value into MongoDB
         collection.insert_one(value)
         # Insert data into PostgreSQL
-        # print(value['timestamp'])
-        cursor.execute(sql_insert, (value['timestamp'], value['opc_pressure'], value['opc_temperature']))
+        cursor.execute(sql_insert, ((datetime.fromtimestamp(value['timestamp'])), value['opc_pressure'], value['opc_temperature']))
         # Manually commit the offset to mark the message as processed
         consumer.commit(msg)
 
