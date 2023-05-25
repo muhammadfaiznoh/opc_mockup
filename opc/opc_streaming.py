@@ -26,12 +26,13 @@ collection = db[collection_name]
 
 # Set up PostgreSQL connection
 conn = psycopg2.connect(
-    host='local_pgdb',
+    host='db',
     port='5432',
-    dbname='opc_server',
-    user='admin@test.com',
-    password='admin'
+    dbname='postgres',
+    user='username',
+    password='password'
 )
+# conn = psycopg2.connect("postgresql://admin:admin@local_pgdb:5432/opc_server")
 conn.autocommit = True
 cursor = conn.cursor()
 
@@ -58,7 +59,7 @@ table_name = 'opc_sensors'
 #         )
 #     """)
 # Prepare SQL statement
-sql_insert = "INSERT INTO opc_server.opc_sensors (datatime, opc_pressure,opc_temperature) VALUES (%s, %s, %s)"
+sql_insert = "INSERT INTO opc_sensors (datatime, opc_pressure,opc_temperature) VALUES (%s, %s, %s)"
 
 while True:
     try:

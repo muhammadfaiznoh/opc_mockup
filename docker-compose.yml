@@ -120,20 +120,21 @@ services:
   #     - ./postgres-data:/data/user
   db:
     image: postgres
-    container_name: local_pgdb
     restart: always
     ports:
       - "5432:5432"
     expose:
       - "5432"
-    environment:
-      POSTGRES_USER: admin@test.com
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: opc_server
+    env_file:
+      - .env
+    # environment:
+    #   POSTGRES_USER: username
+    #   POSTGRES_PASSWORD: password
+    #   POSTGRES_DB: postgres
     volumes:
-      - local_pgdata:/data/db
-      - ./local_pgdb:/docker-entrypoint-initdb.d
-      # - local_pgdata:/var/lib/postgresql/data
+      - db:/data/db
+      - ./db_setup:/docker-entrypoint-initdb.d
+      # - data:/var/lib/postgresql/data
 
   pgadmin:
     image: dpage/pgadmin4
@@ -148,7 +149,8 @@ services:
       - pgadmin-data:/var/lib/pgadmin
 volumes:
   mongodb:
-  local_pgdata:
+  db:
+    external: true
   pgadmin-data:
 
 networks:
