@@ -34,7 +34,7 @@ conn = psycopg2.connect(
     user='username',
     password='password'
 )
-
+# conn = psycopg2.connect("postgresql://admin:admin@local_pgdb:5432/opc_server")
 conn.autocommit = True
 cursor = conn.cursor()
 
@@ -91,4 +91,5 @@ while True:
         break
 
 consumer.close()  # Close the Kafka consumer and PostgreSQL connection
-conn.close()
+# cursor.close()
+# conn.close()

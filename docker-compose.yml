@@ -7,6 +7,8 @@ services:
       - ./opc_data_generator.py
     container_name: opc_data_generator
     restart: on-failure
+    # expose:
+    #   - "4840"
     ports:
       - "4840:4840"
 
@@ -24,6 +26,8 @@ services:
     hostname: kafka
     ports:
     - "9092:9092"
+    # expose:
+    # - "9092"
     restart: always
     environment:
       KAFKA_ADVERTISED_LISTENERS: LISTENER_DOCKER_INTERNAL://kafka:19092,LISTENER_DOCKER_EXTERNAL://${DOCKER_HOST_IP:-127.0.0.1}:9092
@@ -89,20 +93,22 @@ services:
     container_name: superset
     env_file:
       - .env
+    # environment:
+    #   # - SUPERSET_USERNAME=admin
+    #   # - SUPERSET_PASSWORD=admin
+    #   # - SQLALCHEMY_DATABASE_URI=mongodb://root:example@mongo:27017/opc_sensors
+    #   - SQLALCHEMY_ENABLE_POOL_PRE_PING=true
+    #   - SUPERSET_CONFIG_PATH=/etc/superset/superset_config.py
+    #   - SUPERSET_SECRET_KEY=openssl rand -base64 42
     ports:
       - 8088:8088
     volumes:
       # - ./superset/superset_config.py:/etc/superset/superset_config.py
-      # - postgres_db:/home/superset
-      - postgres_db:/superset:/app
-      - postgres_db:/superset/.superset:/root/.superset/
+      - ./superset:/home/superset
     depends_on:
       - db
-    # command: >
-    #   sh -c "superset fab create-admin --username admin --firstname Superset --lastname Admin --email admin@superset.com --password admin &&
-    #   superset db upgrade &&
-    #   superset init &&
-    #   superset run -p 8088 -h 0.0.0.0"
+    command: "superset run -p 8088 -h 0.0.0.0"
+
   db:
     image: postgres
     restart: always
@@ -115,7 +121,7 @@ services:
     volumes:
       - postgres_db:/var/lib/postgresql/data
       - ./db_setup:/docker-entrypoint-initdb.d
-      # - data:/var/lib/postgresql/data #default path
+      # - data:/var/lib/postgresql/data
 
   pgadmin:
     image: dpage/pgadmin4
@@ -127,10 +133,11 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@test.com
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
-      - postgres_db:/var/lib/pgadmin
+      - pgadmin-data:/var/lib/pgadmin
 volumes:
   mongodb:
   postgres_db:
+  pgadmin-data:
 
 networks:
   mockup_network:
