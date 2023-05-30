@@ -38,28 +38,8 @@ conn = psycopg2.connect(
 conn.autocommit = True
 cursor = conn.cursor()
 
-#check table if exist
-# def table_exists(table_name):
-#     cursor.execute("""
-#         SELECT EXISTS (
-#             SELECT 1
-#             FROM information_schema.tables
-#             WHERE table_name = %s
-#         )
-#     """, (table_name,))
-#     return cursor.fetchone()[0]
-
-
 table_name = 'opc_sensors'
 
-# if not table_exists(table_name):
-#     cursor.execute(f"""
-#         CREATE TABLE {table_name} (
-#             timestamp datatype1,
-#             column2 datatype2,
-#             -- Add more columns as needed
-#         )
-#     """)
 # Prepare SQL statement
 sql_insert = "INSERT INTO opc_sensors (datatime, opc_pressure,opc_temperature) VALUES (%s, %s, %s)"
 
