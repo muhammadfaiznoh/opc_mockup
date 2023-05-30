@@ -2,9 +2,9 @@ services:
   data_generator:
     build:
         dockerfile: ./container/datagenerator/Dockerfile
-    entrypoint: 
-      - python
-      - ./opc_data_generator.py
+    # entrypoint: 
+    #   - python
+    #   - ./opc_data_generator.py
     container_name: opc_data_generator
     restart: on-failure
     ports:
@@ -83,9 +83,9 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
 
   superset:
-    # image: apache/superset
-    build:
-      dockerfile: ./container/superset/Dockerfile
+    image: apache/superset
+    # build:
+    #   dockerfile: ./container/superset/Dockerfile
     container_name: superset
     env_file:
       - .env
@@ -98,11 +98,11 @@ services:
       - postgres_db:/superset/.superset:/root/.superset/
     depends_on:
       - db
-    # command: >
-    #   sh -c "superset fab create-admin --username admin --firstname Superset --lastname Admin --email admin@superset.com --password admin &&
-    #   superset db upgrade &&
-    #   superset init &&
-    #   superset run -p 8088 -h 0.0.0.0"
+    command: >
+      sh -c "superset fab create-admin --username admin --firstname Superset --lastname Admin --email admin@superset.com --password admin &&
+      superset db upgrade &&
+      superset init &&
+      superset run -p 8088 -h 0.0.0.0"
   db:
     image: postgres
     restart: always
@@ -127,10 +127,13 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@test.com
       PGADMIN_DEFAULT_PASSWORD: admin
     volumes:
-      - postgres_db:/var/lib/pgadmin
+      - pgadmin-data:/var/lib/pgadmin
+    depends_on:
+      - db
 volumes:
   mongodb:
   postgres_db:
+  pgadmin-data:
 
 networks:
   mockup_network:

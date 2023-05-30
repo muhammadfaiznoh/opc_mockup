@@ -7,4 +7,4 @@ WORKDIR /opt/opc_mockup/datagenerator
 
 COPY ../../datagenerator /opt/opc_mockup/datagenerator
 
-CMD [ "python" "./opc_data_generator.py"]
+CMD [ "python" ,"./opc_data_generator.py"]
