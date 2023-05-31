@@ -92,10 +92,7 @@ services:
     ports:
       - 8088:8088
     volumes:
-      # - ./superset/superset_config.py:/etc/superset/superset_config.py
-      # - postgres_db:/home/superset
-      - postgres_db:/superset:/app
-      - postgres_db:/superset/.superset:/root/.superset/
+      - superset:/app
     depends_on:
       - db
     command: >
@@ -133,7 +130,9 @@ services:
 volumes:
   mongodb:
   postgres_db:
+    # external: true
   pgadmin-data:
+  superset:
 
 networks:
   mockup_network:
