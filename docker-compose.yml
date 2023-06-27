@@ -18,6 +18,7 @@ services:
     - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
+
   kafka:
     image: confluentinc/cp-kafka:5.3.1
     container_name: kafka
@@ -130,11 +131,10 @@ services:
 volumes:
   mongodb:
   postgres_db:
-    # external: true
   pgadmin-data:
   superset:
 
-networks:
-  mockup_network:
-    driver: host
-    name: mockup_network
+# networks:
+#   mockup_network:
+#     driver: host
+#     name: mockup_network
